@@ -245,6 +245,7 @@ Jump to:
 
 ## Index Filter
 ![Index Filter](/img/story-10_indexFilter.JPG)
+
 The Index page  filter evolved into a two part story involving the index controller method and javascript. I was also tasked with creating a search bar that populated as the user typed. 
 
 ### Back End Index Filter
@@ -282,7 +283,7 @@ For information, ViewBag is a container for elements being passed to the view. B
 2. This form required quite a bit of JavaScript as well, as the user could click the "less than" or "greater than" button in order to switch how the information was being filtered. The JavaScript code switches the chevron symbol on each click, and changes the hidden value in the form (the value used to signal how to filter the rental objects). I also had to write a function that would be called on page load so that when the controller method returns the view with the filtered list, the chevron and value would be still be the way the user left it (meaning after they click filter, the chevron and value would not automatically switch back to default value). [See these functions in full](/filterjs.js)
 
 ### Index Search
-![Name Search](/img/story-11_indexSearch.jpg)
+![Name Search](/img/story-11_indexSearch.JPG)
 
 In order to make a search feature work as the user was typing, I decided to use javascript (jQuery syntax) to show and hide rentals based on the name search criterea. For this search bar, all of the rentals are loaded, but are shown or hidden by the javascript. 
 JQuery was very useful as this function selected a lot of elements from the page. First, it retrieved the information from the input element, and then for each bootstrap card, if input could be found in the title it would show or hide the card. 
