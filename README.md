@@ -214,24 +214,32 @@ Jump to:
 
 Near the end of the project, my colleage had completed the section dealing with Rental Requests. I was then tasked with linking the Rental models to the Rental Requests models. This story included quite a bit of full stack development, which I split into 3 parts: create the relationship in the models, implement relationship CRUD functionality on Rental Requests, and show the relationship on the Rentals index page.
 
-1. One to many relationships on ASP.NET are created through a foreign key property on the "is-a" model (is a rental) and a list property on the "has-a" model (has a rental: meaning the request). 
+1. One to many relationships on ASP.NET are created through a foreign key property on the "is-a" model (rental) and a list property on the "has-a" model (rental requests). 
 ```csharp
-//add to the requests model:
-//One to Many relationship with Rentals. This is the list of rentals assigned to each request. 
-public ICollection<Rental> Rentals { get; set; }
+public class RentalRequest
+{
+    //One to Many relationship with Rentals. 
+    //This is the list of rentals assigned to each request. 
+    public ICollection<Rental> Rentals { get; set; }
+```
+```csharp
+public class Rental
+{
+    //Relationship to Requests
+    [ForeignKey("RentalRequest")]
+    public int? RentalRequestID { get; set; }
+    public RentalRequest RentalRequest { get; set; }
 
-//add to the rentals model:
-//Relationship to Requests
-[ForeignKey("RentalRequest")]
-public int? RentalRequestID { get; set; }
-public RentalRequest RentalRequest { get; set; }
 ```
 
-2. The CRUD functionality on Rental Requests required a lot of code both on the front end and the back end. Starting with the front end, I created a select field on the Create-Request page which populated based on rentals in the database which didn't already have a relationship assigned. The details page was even more complicated as it also displayed rentals that were already assigned to the request and selected them by default. By naming the field, I made sure that whatever was selected by the user would be passed back to the controller as an argument.
+2. The CRUD functionality on Rental Requests required a lot of code both on the front end and the back end. Starting with the front end, I created a select field on the CreateRequest page which populated based on rentals in the database which had a null value for the RentalRequests Foreign Key field. The edit page was even more complicated as it also displayed rentals that were already assigned to the request and selected them by default. By naming the field, I made sure that whatever was selected by the user would be passed back to the controller as an argument.
 ![CRUD Detail Page](/img/razor_selectedRentals.JPG)
 
 Once the user selects rentals, they are passed to the controller as a string list. I then wrote logic in the controller that populates the rentals list property of the request, deletes the foreign key from rentals that are no longer associated with the request, and adds foreign keys to new rentals that are now associated with the rental request. I also wrote methods that populate lists of rentals based on their foreign key property in order to pass them to the view. Below is the logic for saving these properties, [view full methods described](/RentalRequestsController.cs)
 ```csharp
+// list of rentals that will no longer be associated with rental request
+List<Rental> deleteRelationship = new List<Rental>(); 
+rentalRequest.Rentals = new List<Rental>();
 if (selectedRentals != null)
     {
         foreach (var rental in selectedRentals)
@@ -286,35 +294,37 @@ The Index page  filter evolved into a two part story involving the index control
 
 ### Back End Index Filter
 
-1. First, I needed to use the view model again, so I could access the different types of rentals, but this time in an IEnumerable list, since I was accessing all entries and displaying them on the page. The filter box passes as an argument into the index method, allowing for a lambda function in a .Where clause to filter the results in the IEnumerable being passed to the view. This story also provided an opportunity to use some exception handling. All filtering was performed on the back end.
+1. First, I needed to use the view model for the index page, so I could access the different types of rentals, but this time in an IEnumerable list, since I was accessing all entries and displaying them on the page. The filter input at the top of the page passes as an argument into the index method on the controller, allowing for a lambda function in a .Where clause to filter the results in the IEnumerable being passed to the view. There is also a hidden form field on the view that passes in a string stating whether to filter by "less" than or "greater" than the search criteria. This story also provided an opportunity to use some exception handling. All filtering was performed on the back end.
 ```csharp
-if (!String.IsNullOrEmpty(searchCost))
-    {
-        try
+public ViewResult Index(string greaterLessThan, string searchCost)
+{
+    if (!String.IsNullOrEmpty(searchCost))
         {
-            decimal cost = Convert.ToDecimal(searchCost);
-            if (greaterLessThan == "less")
+            try
             {
-                iAllRentals = allRentals.Where(s => s.RentalCost < cost);
+                decimal cost = Convert.ToDecimal(searchCost);
+                if (greaterLessThan == "less")
+                {
+                    iAllRentals = allRentals.Where(s => s.RentalCost < cost);
+                }
+                else
+                {
+                    iAllRentals = allRentals.Where(s => s.RentalCost > cost);
+                    ViewBag.LessThanGreaterThan = "greater";
+                }
             }
-            else
+            catch (FormatException) //if letters are inputted
             {
-                iAllRentals = allRentals.Where(s => s.RentalCost > cost);
-                ViewBag.LessThanGreaterThan = "greater";
+                ViewBag.searchCostException = "Please enter numbers only";
             }
-        }
-        catch (FormatException) //if letters are inputted
-        {
-            ViewBag.searchCostException = "Please enter numbers only";
-        }
-        catch (Exception) //catches any other exception
-        {
-            ViewBag.searchCostException = "Something went wrong. Please try again or contact site administrator.";
-        }
+            catch (Exception) //catches any other exception
+            {
+                ViewBag.searchCostException = "Something went wrong. Please try again or contact site administrator.";
+            }
 ```
 For information, ViewBag is a container for elements being passed to the view. Because I filtered on the back end, I was also able to validate on the back end and return error messages from the server. 
 
-### Front End index Filter
+### Front End Index Filter
 
 2. This form required quite a bit of JavaScript as well, as the user could click the "less than" or "greater than" button in order to switch how the information was being filtered. The JavaScript code switches the chevron symbol on each click, and changes the hidden value in the form (the value used to signal how to filter the rental objects). I also had to write a function that would be called on page load so that when the controller method returns the view with the filtered list, the chevron and value would be still be the way the user left it (meaning after they click filter, the chevron and value would not automatically switch back to default value). [See these functions in full](/filterjs.js)
 
@@ -349,7 +359,7 @@ Jump to:
 Our project did not use a front end framework, so all styling was accomplished by using HTML/CSS. The color palette was pre-defined with variable names, but much of the styling was then left up to the engineer. I've included several photos of each of the pages in various sections of this document. I'll provde them at the end as well.
 
 ## Project Management Skills
-Our use of git version control, Azure DevOps, Agile and Scrum Methodologies made me much more confident in my ability to contribute to a team atmosphere in an efffective and efficient way. I thoroughly enjoyed working in a group, communicating needs in the daily standup, and seeking to make my communications as clear as possible through slack messages, email, video calls, commit messages, and pull request descriptions. I learned many important soft skills along the way. 
+Our use of git version control, Azure DevOps, Agile and Scrum Methodologies made me much more confident in my ability to contribute to a team atmosphere in an efffective and efficient way. I thoroughly enjoyed working in a group, communicating needs in the daily standup, and seeking to make my communications as clear as possible through slack messages, email, video calls, commit messages, and pull request descriptions. I also learned many important soft skills along the way. 
 
 # Front End Pictures Consolidated
 ## Rental Index Page
