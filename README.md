@@ -1,11 +1,11 @@
 # Theater Vertigo CMS Project
 4/19-30/2021
 ## Introduction
-The Theater Vertigo CMS Project was a two week sprint where my team was tasked with building out a section of a new website for a theater in Portland. The project had been ongoing, but for our section, we had the opportunity to build out CRUD functionality, set up permissions and roles, and style the front end. 
+The Theater Vertigo CMS Project was a two week sprint where my team was tasked with building out a section of a new website for a theater in Portland. We were assigned to a specific portion of the website and tasked to build out CRUD functionality, set up permissions and roles, and style the front end. 
 
 Over the two week period we utilized Agile/Scrum methodologies for team and project management, git version control, and AzureDevOps as our PM medium. 
 
-The full stack stories comprise the most challenging sections of the project, especially the first two, and involved code in multiple languages working together to present the user with a clean experience. 
+I've consolidated the stories into four main projects, which I've outlined below. I have a few notes at the end, and pictures of the front end consolidated into one section.
 
 ## Contents
 ### The Stories
@@ -23,15 +23,15 @@ The full stack stories comprise the most challenging sections of the project, es
 ### Models Back End
 My assigned section of the site was handling rentals for the theater. There were three types of rentals the company could potentailly be dealing with: a general rental, rooms, and equipment.
 #### Create the Models
-The C# models I created needed to handle these criteria. They would all have properties from a general rental category, but rooms and equipment had addidional properties that were different from each other. Because of this I implemented inheritance in the structure: 
+The C# models I created needed to handle these criteria: they would all have properties from a general rental category, but rooms and equipment had addidional properties that were different from each other. Because of this I implemented inheritance in the structure: 
 ![Model Structure](/img/story1-models-2.jpg)
 
 After making the models, I scaffolded the CRUD pages using Entity Framework, which provided basic CRUD functionality for the parent class (rental). 
 ### Build out CRUD functionality for Inherited Classes
 ![CRUD three models](/img/story2-CreateAndEditPages.JPG)
-This story turned out to be one of the trickiest on the project. Because of the inheritance implementation, these models had the ability to perform CRUD operations using the parent model, however the front end pages simply didn't have access to them. This story evolved into three parts to complete: 1. Add a view model, 2. change the back end logic to transfer information between the view model and the back end models, and 3. use JavaScript to display the form correctly on each page. 
+This story turned out to be one of the trickiest on the project. Because of the inheritance implementation, these models had the ability to perform CRUD operations using the parent model, however the scaffolded front end pages didn't have access to them. This story evolved into three parts: 1. Add a view model, 2. change the back end logic to transfer information between the view model and the back end models, and 3. use JavaScript to display the form correctly on each page. 
 
-1. The database stored the information for the models all in the same table, however it used a delimiter to assign the rental type for each entry when retrieved. Only one model can be used on a view, so in order to handle this I created a view model that contained all properties for all three types of rentals. This helped display the models on the page, but the next issue was how to get the models from the database into the view model. To accomplish this, I added an overloaded constructor to assist with the back end logic. The main constructor takes a rental object, and assignes properties to it based on whether the rental is of the parent or child types. The second constructor is empty and takes no parameter, allowing for an instantiation of the view model object without assigning properties. Below are my two constructors.
+1. The database stored the information for the models all in the same table, however it used a delimiter to assign the rental type for each entry when retrieved. Only one model can be used on a view, so in order to handle this I created a view model that contained all properties for the three types of rentals. This helped display the models on the page, but the next issue was how to get the models from the database into the view model. To accomplish this, I added an overloaded constructor to assist with the back end logic. The main constructor takes a rental object, and assignes properties to it based on whether the rental is of the parent or child types. The second constructor is empty and takes no parameter, allowing for an instantiation of the view model object without assigning properties. Below are my two constructors.
 ```csharp
 public class AllRentals
     {
@@ -63,7 +63,7 @@ public class AllRentals
         public AllRentals() { }
 ```
 
-2. The Controller Methods were made simple by the above logic, allowing for an easy instantiation of the view model, passing in the rental retrieved from the database as a parameter. Below is the basic logic (I've stripped out the conditionals controlling for errors). The constructor will assign properties based on whether the rental in the database is general, room, or equipment.
+2. The controller methods for retrieval of database items were made simple because of this logic, allowing for an easy instantiation of the view model, passing in the rental retrieved from the database as an argument. Below is the basic logic (I've stripped out the conditionals controlling for errors). The constructor will assign properties based on whether the rental in the database is general, room, or equipment.
 ```csharp
 public ActionResult Details(int? id)
         {
@@ -71,7 +71,45 @@ public ActionResult Details(int? id)
             AllRentals allRentals = new AllRentals(rental);
             return View(allRentals);
 ```
+The create method, however, had to add properties from the view model to the model manually. I ran into an issue where the method was validating the view model instead of the model I was transferring the information to. I found a validation method, instead of .IsValid(), I was able to use .IsVavlidField(fieldname) for all fields used to validate the information passed to the model. This abundance of code was messy, so in order to clean it up, I encapsulated much of the code in private methods that I call in the the main Create method. To save space, I've only copied part of the code here:
+```csharp
+public ActionResult Create([Bind(Include = "RentalId,RentalName,RentalCost,FlawsAndDamages," +
+    "ChokingHazard,SuffocationHazard,PurchasePrice," +
+    "RoomNumber,SquareFootage,MaxOccupancy")] AllRentals allrentals, string name /*comes from last input on view*/)
+{
+    bool success = false;
 
+    if (name == "rental")
+    {
+        success = CreateRental(allrentals);
+    }
+    else if (name == "equipment")
+    {
+        success = CreateEquipmentRental(allrentals);
+```
+Here is the CreateRental method for an example:
+```csharp
+private bool CreateRental(AllRentals allrentals)
+{
+    //map the view model to model
+    Rental rental = new Rental()
+    {
+        RentalName = allrentals.RentalName,
+        RentalCost = allrentals.RentalCost,
+        FlawsAndDamages = allrentals.FlawsAndDamages
+    };
+
+    //validate only model fields
+    if (ModelState.IsValidField("RentalName") && ModelState.IsValidField("RentalCost") &&
+        ModelState.IsValidField("FlawsAndDamages"))
+    {
+        db.Rentals.Add(rental);
+        db.SaveChanges();
+        return true;
+    }
+    return false;
+}
+```
 ### Models Front End
 3. The view required some creative thinking as well. I needed the ability to hide/show form fields based on the user's choice for the rental type. I wrote JavaScript functions to accomplish this. I also needed a way to tell the controller method what type of rental would be coming in. I added a hidden form field to carry this information to the controller. The JavaScript shows and hides form fields and also changes the value of the rental type form field based on the user's choice of rental.
 ```javascript
@@ -98,7 +136,7 @@ function rentalChange(value) {
     document.getElementById("rentalType").value = value
 }
 ```
-This code allowed the user to change the rental type, however the edit page only needed to run this function when the page loads. The timing of running the script in this framework necessitated calling this function in the .js file.  
+This code allowed the user to change the rental type, however it only runs on the create page when the dropdown field changes. The edit page needed to run this function when the page loads, rather than on a change. The timing of running the script in this framework necessitated calling this function in the .js file.  
 ```javascript
 if (document.URL.includes("/Rent/Rentals/Edit/")
     || document.URL.includes("/Rent/Rentals/Create")) {
@@ -120,34 +158,34 @@ Jump to:
 
 ## Create Rental Manager
 
-The next several stories comprised the creation of the Rental Manager user/role. I created the user, then I was then tasked with creating a button that could easily log in the rental manager for development purposes, and finally I restricted crud operations to the user in that role. 
+The next several stories comprised the creation of the Rental Manager user/role. I created the user, then I was then tasked with creating a button that could easily log-in the rental manager for development purposes, and finally I restricted crud operations to the user in that role. 
 
 ### Rental Manager Back End
 [Jump to Front End Portion](###rental-manager-front-end)
 
 The Rental Manager class extends from ApplicationUser, and only adds two properties. Once I created the class, I then seeded a rental manager user into the database for development purposes, using a static seed method within the class. The static method allowed me to call this in the global seed method (configuration.cs file). For the whole class see [RentalManager.cs](/RentalManager.cs) 
 
-I explain below how I hid the button access to CRUD pages, however in case a user tried to bypass the buttons, and typed in the url to view a forbidden page, access was restricted on the back end using the AuthorizeAttribute Data Annotation class. I overrode two methods in order to create the class which checked for the user role of "rental manager" and redirected to an "access denied" page if not found. 
+I'll explain in the front end section how I hid the buttons which access the CRUD pages, however in case a user tried to bypass the buttons, and typed in the url to view a forbidden page, access was also restricted on the back end using the AuthorizeAttribute Data Annotation class. I overrode two methods in order to create the class which checked for the user role of "rental manager" and redirected to an "access denied" page if not found. 
 ```csharp
 // authorization class for RentalManager role. 
-    public class RentalManagerAuthorize : AuthorizeAttribute
+public class RentalManagerAuthorize : AuthorizeAttribute
+{
+    protected override bool AuthorizeCore(HttpContextBase httpContext)//checks for rental manager role
     {
-        protected override bool AuthorizeCore(HttpContextBase httpContext)//checks for rental manager role
+        if (httpContext.User.Identity.IsAuthenticated)
         {
-            if (httpContext.User.Identity.IsAuthenticated)
+            if (httpContext.User.IsInRole("RentalManager")) 
             {
-                if (httpContext.User.IsInRole("RentalManager")) 
-                {
-                    return true;
-                }
+                return true;
             }
-            return false;
         }
-        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext) //handles redirect to access denied page
-        {
-            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Rentals/AccessDenied" }));
-        }
+        return false;
     }
+    protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext) //handles redirect to access denied page
+    {
+        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Rentals/AccessDenied" }));
+    }
+}
 ```
 The above code allowed me to use this data annotation in the controller, which I placed above the create, details, and delete methods: 
 ```csharp
@@ -160,13 +198,11 @@ public ActionResult Create()
 
 ### Rental Manager Front End
 
-The next requirement was to create an easy login button for development purposes. By clicking on the button, the developer would automatically be logged in as the manager. It took me a while to realize that I could create a form where all the fields were hidden except the submit button. All information necessary for Login is contained in the form, and once clicked would be passed to the LoginViewModel. The button only shows up if the user is not logged in, and is only present in the rentals area, a problem which I solved by placing the code for the button in a partial view, and then only displaying the partial view if the url contained /rent/rentals.
+The next requirement was to create an easy login button for development purposes. By clicking on the button, the developer would automatically be logged in as the manager. It took me a while to realize that I could create a form where all the fields were hidden except the submit button. All information necessary for Login is contained in the form, and once clicked would be passed to the LoginViewModel. The button only shows up if the user is not logged in, and is only present in the rentals area, a problem which I solved by placing the code for the button in a partial view, and then only displaying the partial view if the url contained /rent/rentals. Here is the partial view:
 ![Rental Manager Login](/img/loginbutton.JPG)
 
 Restricting CRUD access on the front end was just a matter of getting the user role and, if it was "RentalManager", hiding the buttons to access the CRUD pages.
 ![Rental CRUD access buttons](/img/card-footer.JPG)
-
-
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
