@@ -9,17 +9,17 @@ I've consolidated the stories into four main projects, which I've outlined below
 
 ## Contents
 ### The Stories
-- [Making the Models](##making-the-models)
+- [Making the Models](#making-the-models)
 - [Create Rental Manager](#create-rental-manager)
 - [Link the Rentals models to Requests models](#link-rentals-to-rental-requests)
 - [Index Filter Feature](#index-filter)
 
 ### Notes
-- [Styling](##a-note-on-styling)
+- [Styling](#a-note-on-styling)
 - [Website Pictures Consolidated](#front-end-pictures-consolidated)
 
 ## Making the Models
-[Jump to Front End Portion](###models-front-end)
+[Jump to Front End Portion](#models-front-end)
 ### Models Back End
 My assigned section of the site was handling rentals for the theater. There were three types of rentals the company could potentailly be dealing with: a general rental, rooms, and equipment.
 #### Create the Models
@@ -154,14 +154,14 @@ The final look provided three different forms based on the rental type and abili
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
-- [Back End portion of this story](###models-back-end)
+- [Back End portion of this story](#models-back-end)
 
 ## Create Rental Manager
 
 The next several stories comprised the creation of the Rental Manager user/role. I created the user, then I was then tasked with creating a button that could easily log-in the rental manager for development purposes, and finally I restricted crud operations to the user in that role. 
 
 ### Rental Manager Back End
-[Jump to Front End Portion](###rental-manager-front-end)
+[Jump to Front End Portion](#rental-manager-front-end)
 
 The Rental Manager class extends from ApplicationUser, and only adds two properties. Once I created the class, I then seeded a rental manager user into the database for development purposes, using a static seed method within the class. The static method allowed me to call this in the global seed method (configuration.cs file). For the whole class see [RentalManager.cs](/RentalManager.cs) 
 
@@ -206,8 +206,8 @@ Restricting CRUD access on the front end was just a matter of getting the user r
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
-- [Jump to Back End Portion of this story](###rental-manager-back-end)
-- [Index Filter](###index-filter)
+- [Jump to Back End Portion of this story](#rental-manager-back-end)
+- [Index Filter](#index-filter)
 
 ## Link Rentals to Rental Requests
 ![Link Rentals to Requests](/img/story13-1.JPG)
@@ -285,7 +285,7 @@ The razor/html code for the details page is as follows:
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
-- [Create Rental Manager](##create-rental-manager)
+- [Create Rental Manager](#create-rental-manager)
 
 ## Index Filter
 ![Index Filter](/img/story-10_indexFilter.JPG)
@@ -350,8 +350,8 @@ function searchCards() {
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
-- [Create Rental Manager](##create-rental-manager)
-- [Link Rental Models to Rental Request Models](##link-rentals-to-rental-requests)
+- [Create Rental Manager](#create-rental-manager)
+- [Link Rental Models to Rental Request Models](#link-rentals-to-rental-requests)
 
 
 
