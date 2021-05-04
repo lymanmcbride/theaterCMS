@@ -317,12 +317,12 @@ Our use of git version control, Azure DevOps, Agile and Scrum Methodologies made
 
 # Front End Pictures Consolidated
 ## Rental Index Page
-![Rental Index](/img/rentalIndex.jpg)
+![Rental Index](/img/rentalIndex.JPG)
 It bears mentioning that the pill-badges "Choking Hazard" and "Suffocation Hazard" only display if the model's corresponding property is set to True. 
-![Rental Index2](/img/index2.jpg)
+![Rental Index2](/img/index2.JPG)
 ## Rental Details Page
-![Rental Details](/img/rental_details.jpg)
+![Rental Details](/img/rental_details.JPG)
 ## Rental Forms
-![Rental Form](/img/rental.JPG)
-![Equipment Form](/img/equipment.JPG)
-![Room Form](/img/rooms.JPG)
+![Rental Form](/img/Rental.JPG)
+![Equipment Form](/img/Equipment.JPG)
+![Room Form](/img/Rooms.JPG)
