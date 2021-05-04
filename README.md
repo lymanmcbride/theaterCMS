@@ -110,9 +110,9 @@ if (document.URL.includes("/Rent/Rentals/Edit/")
 ```
 The final look provided three different forms based on the rental type and ability to CRUD each of them:
 
-![Rental Form](img\rental.JPG)
-![Equipment Form](img\equipment.JPG)
-![Room Form](img\rooms.JPG)
+![Rental Form](/img/rental.JPG)
+![Equipment Form](/img/equipment.JPG)
+![Room Form](/img/rooms.JPG)
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
@@ -174,7 +174,7 @@ Jump to:
 - [Index Filter](###index-filter)
 
 ## Link Rentals to Rental Requests
-![Link Rentals to Requests](img\story13-1.JPG)
+![Link Rentals to Requests](/img/story13-1.JPG)
 Near the end of the project, my colleage had completed the section dealing with Rental Requests. I was then tasked with linking the Rental models to the Rental Requests models. This story included quite a bit of full stack development, which I split into 3 parts: create the relationship in the models, implement relationship CRUD functionality on Rental Requests, and show the relationship on the Rentals index page.
 
 1. One to many relationships on ASP.NET are created through a foreign key property on the "is-a" model (is a rental) and a list property on the "has-a" model (has a rental: meaning the request). 
@@ -191,9 +191,9 @@ public RentalRequest RentalRequest { get; set; }
 ```
 
 2. The CRUD functionality on Rental Requests required a lot of code both on the front end and the back end. Starting with the front end, I created a select field on the Create-Request page which populated based on rentals in the database which didn't already have a relationship assigned. The details page was even more complicated as it also displayed rentals that were already assigned to the request and selected them by default. By naming the field, I made sure that whatever was selected by the user would be passed back to the controller as an argument.
-![CRUD Detail Page](img\razor_selectedRentals.JPG)
+![CRUD Detail Page](/img/razor_selectedRentals.JPG)
 
-Once the user selects rentals, they are passed to the controller as a string list. I then wrote logic in the controller that populates the rentals list property of the request, deletes the foreign key from rentals that are no longer associated with the request, and adds foreign keys to new rentals that are now associated with the rental request. I also wrote methods that populate lists of rentals based on their foreign key property in order to pass them to the view. Below is the logic for saving these properties, [click here for the full methods described](RentalRequestsController.cs)
+Once the user selects rentals, they are passed to the controller as a string list. I then wrote logic in the controller that populates the rentals list property of the request, deletes the foreign key from rentals that are no longer associated with the request, and adds foreign keys to new rentals that are now associated with the rental request. I also wrote methods that populate lists of rentals based on their foreign key property in order to pass them to the view. Below is the logic for saving these properties, [click here for the full methods described](/RentalRequestsController.cs)
 ```csharp
 if (selectedRentals != null)
     {
@@ -243,7 +243,7 @@ Jump to:
 - [Create Rental Manager](##create-rental-manager)
 
 ## Index Filter
-![Index Filter](img\story-10_indexFilter.JPG)
+![Index Filter](/img/story-10_indexFilter.JPG)
 The Index page  filter evolved into a two part story involving the index controller method and javascript. I was also tasked with creating a search bar that populated as the user typed. 
 
 ### Back End Index Filter
@@ -321,6 +321,6 @@ It bears mentioning that the pill-badges "Choking Hazard" and "Suffocation Hazar
 ## Rental Details Page
 ![Rental Details](/img/rental_details.jpg)
 ## Rental Forms
-![Rental Form](img\rental.JPG)
-![Equipment Form](img\equipment.JPG)
-![Room Form](img\rooms.JPG)
+![Rental Form](/img/rental.JPG)
+![Equipment Form](/img/equipment.JPG)
+![Room Form](/img/rooms.JPG)
