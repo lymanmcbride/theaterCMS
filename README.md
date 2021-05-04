@@ -1,7 +1,7 @@
 # Theater Vertigo CMS Project
 4/19-30/2021
 ## Introduction
-The Theater Vertigo CMS Project was a two week sprint where my team was tasked with building out a section of a new website for a theater in Portland. We were assigned to a specific portion of the website and tasked to build out CRUD functionality, set up permissions and roles, and style the front end. 
+The Theater Vertigo CMS Project was a two week sprint where my team was tasked with building out a section of a new website for a theater in Portland. We were assigned to a specific portion of the website and tasked to build CRUD functionality, set up permissions and roles, and style the front end. 
 
 Over the two week period we utilized Agile/Scrum methodologies for team and project management, git version control, and AzureDevOps as our PM medium. 
 
@@ -10,9 +10,9 @@ I've consolidated the stories into four main projects, which I've outlined below
 ## Contents
 ### The Stories
 - [Making the Models](##making-the-models)
-- [Create Rental Manager](###create-rental-manager)
-- [Link the Rentals models to Requests models](###link-rentals-to-rental-requests)
-- [Index Filter Feature](###index-filter)
+- [Create Rental Manager](#create-rental-manager)
+- [Link the Rentals models to Requests models](#link-rentals-to-rental-requests)
+- [Index Filter Feature](#index-filter)
 
 ### Notes
 - [Styling](##a-note-on-styling)
