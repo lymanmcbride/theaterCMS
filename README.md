@@ -24,11 +24,11 @@ The full stack stories comprise the most challenging sections of the project, es
 My assigned section of the site was handling rentals for the theater. There were three types of rentals the company could potentailly be dealing with: a general rental, rooms, and equipment.
 #### Create the Models
 The C# models I created needed to handle these criteria. They would all have properties from a general rental category, but rooms and equipment had addidional properties that were different from each other. Because of this I implemented inheritance in the structure: 
-![Model Structure](img\story1-models-2.jpg)
+![Model Structure](/img/story1-models-2.jpg)
 
 After making the models, I scaffolded the CRUD pages using Entity Framework, which provided basic CRUD functionality for the parent class (rental). 
 ### Build out CRUD functionality for Inherited Classes
-![CRUD three models](img\story2-CreateAndEditPages.JPG)
+![CRUD three models](/img/story2-CreateAndEditPages.JPG)
 This story turned out to be one of the trickiest on the project. Because of the inheritance implementation, these models had the ability to perform CRUD operations using the parent model, however the front end pages simply didn't have access to them. This story evolved into three parts to complete: 1. Add a view model, 2. change the back end logic to transfer information between the view model and the back end models, and 3. use JavaScript to display the form correctly on each page. 
 
 1. The database stored the information for the models all in the same table, however it used a delimiter to assign the rental type for each entry when retrieved. Only one model can be used on a view, so in order to handle this I created a view model that contained all properties for all three types of rentals. This helped display the models on the page, but the next issue was how to get the models from the database into the view model. To accomplish this, I added an overloaded constructor to assist with the back end logic. The main constructor takes a rental object, and assignes properties to it based on whether the rental is of the parent or child types. The second constructor is empty and takes no parameter, allowing for an instantiation of the view model object without assigning properties. Below are my two constructors.
