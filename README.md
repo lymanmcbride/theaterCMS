@@ -367,6 +367,4 @@ It bears mentioning that the pill-badges "Choking Hazard" and "Suffocation Hazar
 ## Rental Details Page
 ![Rental Details](/img/rental_details.JPG)
 ## Rental Forms
-![Rental Form](/img/Rental.JPG)
-![Equipment Form](/img/Equipment.JPG)
-![Room Form](/img/Rooms.JPG)
+![Rental Forms](/img/rental-forms.gif)
