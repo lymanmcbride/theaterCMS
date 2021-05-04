@@ -175,6 +175,7 @@ Jump to:
 
 ## Link Rentals to Rental Requests
 ![Link Rentals to Requests](/img/story13-1.JPG)
+
 Near the end of the project, my colleage had completed the section dealing with Rental Requests. I was then tasked with linking the Rental models to the Rental Requests models. This story included quite a bit of full stack development, which I split into 3 parts: create the relationship in the models, implement relationship CRUD functionality on Rental Requests, and show the relationship on the Rentals index page.
 
 1. One to many relationships on ASP.NET are created through a foreign key property on the "is-a" model (is a rental) and a list property on the "has-a" model (has a rental: meaning the request). 
@@ -193,7 +194,7 @@ public RentalRequest RentalRequest { get; set; }
 2. The CRUD functionality on Rental Requests required a lot of code both on the front end and the back end. Starting with the front end, I created a select field on the Create-Request page which populated based on rentals in the database which didn't already have a relationship assigned. The details page was even more complicated as it also displayed rentals that were already assigned to the request and selected them by default. By naming the field, I made sure that whatever was selected by the user would be passed back to the controller as an argument.
 ![CRUD Detail Page](/img/razor_selectedRentals.JPG)
 
-Once the user selects rentals, they are passed to the controller as a string list. I then wrote logic in the controller that populates the rentals list property of the request, deletes the foreign key from rentals that are no longer associated with the request, and adds foreign keys to new rentals that are now associated with the rental request. I also wrote methods that populate lists of rentals based on their foreign key property in order to pass them to the view. Below is the logic for saving these properties, [click here for the full methods described](/RentalRequestsController.cs)
+Once the user selects rentals, they are passed to the controller as a string list. I then wrote logic in the controller that populates the rentals list property of the request, deletes the foreign key from rentals that are no longer associated with the request, and adds foreign keys to new rentals that are now associated with the rental request. I also wrote methods that populate lists of rentals based on their foreign key property in order to pass them to the view. Below is the logic for saving these properties, [view full methods described](/RentalRequestsController.cs)
 ```csharp
 if (selectedRentals != null)
     {
@@ -232,11 +233,11 @@ if (ModelState.IsValid)
     }
 ```
 3. The story required some modifications to the display on the Rentals pages as well. I added Razor logic so that if the rental's request property wasn't null (meaning it is associated with a request), the opacity was reduced. I also added a section to the details page that showed the associated request's information if it existed. The end result looked like this:
-![Rental Index](/img/rentalIndex.jpg)
-![Rental Details](/img/rental_details.jpg)
+![Rental Index](/img/rentalindex.JPG)
+![Rental Details](/img/rental_details.JPG)
 
 The razor/html code for the details page is as follows:
-![Rental Details Code](/img/requestDetailsCode.jpg)
+![Rental Details Code](/img/requestDetailsCode.JPG)
 
 Jump to: 
 - [Top](#theater-vertigo-cms-project)
