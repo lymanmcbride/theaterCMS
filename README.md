@@ -110,7 +110,7 @@ if (document.URL.includes("/Rent/Rentals/Edit/")
 ```
 The final look provided three different forms based on the rental type and ability to CRUD each of them:
 
-![Rental Form](/img/rental.JPG)
+![Rental Form](img/rental.JPG)
 ![Equipment Form](/img/equipment.JPG)
 ![Room Form](/img/rooms.JPG)
 
