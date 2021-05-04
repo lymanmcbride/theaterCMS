@@ -161,10 +161,10 @@ public ActionResult Create()
 ### Rental Manager Front End
 
 The next requirement was to create an easy login button for development purposes. By clicking on the button, the developer would automatically be logged in as the manager. It took me a while to realize that I could create a form where all the fields were hidden except the submit button. All information necessary for Login is contained in the form, and once clicked would be passed to the LoginViewModel. The button only shows up if the user is not logged in, and is only present in the rentals area, a problem which I solved by placing the code for the button in a partial view, and then only displaying the partial view if the url contained /rent/rentals.
-![Rental Manager Login](/img/loginButton.jpg)
+![Rental Manager Login](/img/loginButton.JPG)
 
 Restricting CRUD access on the front end was just a matter of getting the user role and, if it was "RentalManager", hiding the buttons to access the CRUD pages.
-![Rental CRUD access buttons](/img/card-footer.jpg)
+![Rental CRUD access buttons](/img/card-footer.JPG)
 
 
 
