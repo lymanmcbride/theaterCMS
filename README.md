@@ -354,7 +354,7 @@ Jump to:
 
 
 ## A note on styling
-Our project did not use a front end framework, so all styling was accomplished by using HTML/CSS. The color palette was pre-defined with variable names, but much of the styling was then left up to the engineer. I've included several photos of each of the pages in various sections of this document. I'll provde them at the end as well.
+Our project did not use a front end framework, so all styling was accomplished by using HTML/CSS. The color palette was pre-defined with variable names, but much of the styling was then left up to the engineer. I've included several photos of each of the pages in various sections of this document. I will provde them at the end as well.
 
 ## Project Management Skills
 Our use of git version control, Azure DevOps, Agile and Scrum Methodologies made me much more confident in my ability to contribute to a team atmosphere in an efffective and efficient way. I thoroughly enjoyed working in a group, communicating needs in the daily standup, and seeking to make my communications as clear as possible through slack messages, email, video calls, commit messages, and pull request descriptions. I also learned many important soft skills along the way. 
