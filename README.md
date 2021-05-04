@@ -233,7 +233,7 @@ if (ModelState.IsValid)
     }
 ```
 3. The story required some modifications to the display on the Rentals pages as well. I added Razor logic so that if the rental's request property wasn't null (meaning it is associated with a request), the opacity was reduced. I also added a section to the details page that showed the associated request's information if it existed. The end result looked like this:
-![Rental Index](/img/rentalindex.JPG)
+![Rental Index](/img/rentalIndex.JPG)
 ![Rental Details](/img/rental_details.JPG)
 
 The razor/html code for the details page is as follows:
